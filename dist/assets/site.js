@@ -48,9 +48,26 @@ function typeHeroCommand(output) {
   requestAnimationFrame(frame);
 }
 
-const command = document.querySelector(".command-output");
-if (command && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-  typeHeroCommand(command);
+const motionAllowed = matchMedia("(prefers-reduced-motion: no-preference)");
+if (motionAllowed.matches) {
+  const command = document.querySelector(".command-output");
+  if (command) typeHeroCommand(command);
+
+  if ("IntersectionObserver" in window) {
+    const visibleFraction = 0.55;
+    const observer = new IntersectionObserver((entries) => {
+      for (const { target, intersectionRatio } of entries) {
+        if (intersectionRatio < visibleFraction) continue;
+        target.dataset.state = "running";
+        observer.unobserve(target);
+      }
+    }, { threshold: visibleFraction });
+
+    for (const trace of document.querySelectorAll("[data-terminal-run]")) {
+      trace.dataset.state = "waiting";
+      observer.observe(trace);
+    }
+  }
 }
 
 function openLinkedScenario() {

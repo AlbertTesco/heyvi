@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import re
 
-from content import CASES, NAVIGATION, SERVICES, STEPS
+from content import CASES, NAVIGATION, SERVICES, STEPS, TERMINAL_RUNS
 
 ROOT = Path(__file__).resolve().parent
 DIST = ROOT / "dist"
@@ -144,20 +144,23 @@ def breadcrumbs(label, parent=None):
             f'{icon("chevron")}{middle}<span aria-current="page">{label}</span></nav>')
 
 
-def terminal_background():
-    return """<div class="terminal-background" aria-hidden="true">
-        <div class="terminal-trace"><span>&gt;_</span><span class="terminal-rows"></span></div>
-      </div>"""
+def terminal_run(name):
+    command, progress, result = TERMINAL_RUNS[name]
+    return f"""<div class="terminal-trace" data-terminal-run aria-hidden="true">
+      <div class="terminal-entry"><span>&gt;</span> heyvi demo {escape(command)}</div>
+      <div class="terminal-progress"><span>·</span> {escape(progress)}</div>
+      <div class="terminal-result"><span>✓</span> {escape(result)}</div>
+    </div>"""
 
 
-def page_intro(title, summary="", crumb=None, parent=None, action=""):
+def page_intro(title, summary="", crumb=None, parent=None, action="", *, terminal):
     lead = f'<p class="lead">{summary}</p>' if summary else ""
     return f"""<section class="page-intro terminal-surface">
-      {terminal_background()}
       <div class="wrap">
         {breadcrumbs(crumb or title, parent)}
         <div class="intro-grid">
-          <h1>{title}</h1>{lead}{action}
+          <div class="intro-copy"><h1>{title}</h1>{lead}{action}</div>
+          {terminal_run(terminal)}
         </div>
       </div>
     </section>"""
@@ -229,7 +232,6 @@ def homepage():
         for slug, key, name in integrations
     )
     return f"""<section class="hero terminal-surface">
-      {terminal_background()}
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <h1>Интеллектуальная <span>автоматизация<br class="desktop-break"> бизнеса</span></h1>
@@ -241,6 +243,7 @@ def homepage():
         </div>
         <div class="hero-art">
           <img src="/assets/hero-orbit.webp" width="1152" height="1152" alt="" fetchpriority="high">
+          {terminal_run("platform")}
         </div>
       </div>
     </section>
@@ -253,6 +256,7 @@ def homepage():
       <nav class="related-links" aria-label="Другие услуги">
         <span>Другие услуги</span>{integration_links}
       </nav>
+      {terminal_run("agents")}
     </section>
     <section class="wrap section featured-cases">
       <div class="section-heading">
@@ -260,22 +264,24 @@ def homepage():
         {button("Все сценарии", "/cases/", "quiet")}
       </div>
       {case_cards(2, featured=True)}
+      {terminal_run("examples")}
     </section>
     <section class="section section-tinted terminal-surface">
-      {terminal_background()}
       <div class="wrap">
         <h2>Как проходит внедрение</h2>
         {steps()}
+        {terminal_run("rollout")}
       </div>
     </section>
     {banner()}"""
 
 
 def agents_page():
-    return page_intro("ИИ-агенты для бизнеса", "Агенты выполняют рутинные операции. Команда проверяет результат.") + f"""
+    return page_intro("ИИ-агенты для бизнеса", "Агенты выполняют рутинные операции. Команда проверяет результат.", terminal="agents") + f"""
     <section class="wrap section catalog">
       <h2 class="visually-hidden">Направления</h2>
       {cards("agents")}
+      {terminal_run("catalog")}
     </section>
     {banner()}"""
 
@@ -285,12 +291,13 @@ def services_page():
         f'<button class="filter-button" type="button" data-filter="{value}" aria-pressed="{str(value == "all").lower()}">{label}</button>'
         for value, label in CATEGORIES
     )
-    return page_intro("Услуги") + f"""
+    return page_intro("Услуги", terminal="catalog") + f"""
     <section class="wrap section catalog">
       <h2 class="visually-hidden">Каталог услуг</h2>
       <div class="filters" role="group" aria-label="Фильтр услуг" hidden>{filters}</div>
       <p class="visually-hidden" role="status" data-filter-status></p>
       {cards()}
+      {terminal_run("browse")}
     </section>
     {banner()}"""
 
@@ -301,36 +308,41 @@ def service_page(slug, item):
     tasks = "".join(f'<li><h3>{title}</h3><p>{description}</p></li>' for title, description in item["tasks"])
     workflow = "".join(f'<li>{step}</li>' for step in item["workflow"])
     return page_intro(item["title"], item["intro"], item["name"], parent,
-                      button("Обсудить задачу", f"/contact/?service={slug}")) + f"""
+                      button("Обсудить задачу", f"/contact/?service={slug}"), terminal=slug) + f"""
     <section class="wrap section detail-body">
       <div><h2>{'Что можно поручить агенту' if is_agent else 'Что входит в работу'}</h2><ul class="task-list">{tasks}</ul></div>
-      <div class="workflow"><h2>Как это работает</h2><ol>{workflow}</ol></div>
+      <div>
+        <div class="workflow"><h2>Как это работает</h2><ol>{workflow}</ol></div>
+        {terminal_run("workflow")}
+      </div>
     </section>"""
 
 
 def cases_page():
-    return page_intro("Сценарии автоматизации", "Демонстрационные примеры для бухгалтерии, продаж и CRM.") + f"""
+    return page_intro("Сценарии автоматизации", "Демонстрационные примеры для бухгалтерии, продаж и CRM.", terminal="examples") + f"""
     <section class="wrap section catalog">
       <h2 class="visually-hidden">Сценарии автоматизации</h2>
       {case_cards()}
+      {terminal_run("cases")}
     </section>
     {banner()}"""
 
 
 def about_page():
-    return page_intro("О компании", "ХЭЙВИ выросла из направления автоматизации КАДИС. Внедряем ИИ, опираясь на опыт работы с бухгалтерией, продажами и подбором персонала.") + f"""
+    return page_intro("О компании", "ХЭЙВИ выросла из направления автоматизации КАДИС. Внедряем ИИ, опираясь на опыт работы с бухгалтерией, продажами и подбором персонала.", terminal="about") + f"""
     <section class="section section-tinted terminal-surface">
-    {terminal_background()}
-    <div class="wrap">
-      <h2>Этапы работы</h2>{steps()}
-    </div></section>
+      <div class="wrap">
+        <h2>Этапы работы</h2>{steps()}
+        {terminal_run("rollout")}
+      </div>
+    </section>
     {banner()}"""
 
 
 def contact_page():
     options = "".join(f'<option value="{slug}">{item["title"]}</option>' for slug, item in SERVICES.items())
-    return page_intro("Обсудить задачу", "Опишите процесс и скачайте бриф.") + f"""
-    <section class="wrap section catalog">
+    return page_intro("Обсудить задачу", "Опишите процесс и скачайте бриф.", terminal="brief") + f"""
+    <section class="wrap section catalog contact-layout">
       <div class="brief-panel">
         <form id="brief-form" hidden>
           <div class="field"><label for="service">Направление</label>
@@ -349,6 +361,7 @@ def contact_page():
         </form>
         <noscript><p>Включите JavaScript, чтобы заполнить бриф на сайте, или скачайте шаблон.</p><a class="text-link" href="/assets/brief-template.txt" download>Скачать шаблон брифа</a></noscript>
       </div>
+      {terminal_run("template")}
     </section>"""
 
 
