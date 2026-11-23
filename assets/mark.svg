@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 124">
+  <title>ХЭЙВИ</title>
+  <defs>
+    <linearGradient id="orbit" x1="0" x2=".3" y1=".1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#48f5d5"/>
+      <stop offset=".46" stop-color="#12badf"/>
+      <stop offset="1" stop-color="#2874ef"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#12badf"/>
+      <stop offset="1" stop-color="#48f5d5"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#orbit)" d="M94 21C76 16 53 22 35 34C15 48 3 65 4 83C5 103 19 119 42 120C71 123 100 107 114 83C122 69 125 55 124 44C122 63 113 79 97 90C80 103 54 108 38 99C24 91 21 76 28 60C40 34 68 21 94 21Z"/>
+  <path fill="url(#spark)" d="M119 3C119 20 124 28 134 33C119 32 109 37 104 54C105 39 101 31 91 26C106 25 114 18 119 3Z"/>
+</svg>
