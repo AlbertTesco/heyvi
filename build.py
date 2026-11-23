@@ -97,7 +97,7 @@ def write_page(slug, title, description, body, active=""):
 <meta name="theme-color" content="{TOKENS['color-canvas']}">
 <title>{escape(full_title)}</title>
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-<link rel="preload" href="/assets/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/ibm-plex-sans-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/site.js" defer></script>
 </head>
