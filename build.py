@@ -1,6 +1,7 @@
 """Generate the static site with Python's standard library."""
 
 from html import escape
+from hashlib import sha256
 import json
 from pathlib import Path
 import re
@@ -81,6 +82,11 @@ def button(label, href, style="primary"):
     return f'<a class="button button-{style}" href="{href}">{label}</a>'
 
 
+def versioned_asset(name):
+    version = sha256((DIST / "assets" / name).read_bytes()).hexdigest()[:12]
+    return f"/assets/{name}?v={version}"
+
+
 def write_page(slug, title, description, body, active=""):
     destination = DIST / slug / "index.html"
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -96,8 +102,8 @@ def write_page(slug, title, description, body, active=""):
 <title>{escape(full_title)}</title>
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <link rel="preload" href="/assets/ibm-plex-sans-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css">
-<script src="/assets/site.js" defer></script>
+<link rel="stylesheet" href="{versioned_asset('site.css')}">
+<script src="{versioned_asset('site.js')}" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
