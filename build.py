@@ -138,9 +138,16 @@ def breadcrumbs(label, parent=None):
             f'{icon("chevron")}{middle}<span aria-current="page">{label}</span></nav>')
 
 
+def terminal_background():
+    return """<div class="terminal-background" aria-hidden="true">
+        <div class="terminal-trace"><span>&gt;_</span><span class="terminal-rows"></span></div>
+      </div>"""
+
+
 def page_intro(title, summary="", crumb=None, parent=None, action=""):
     lead = f'<p class="lead">{summary}</p>' if summary else ""
-    return f"""<section class="page-intro">
+    return f"""<section class="page-intro terminal-surface">
+      {terminal_background()}
       <div class="wrap">
         {breadcrumbs(crumb or title, parent)}
         <div class="intro-grid">
@@ -215,7 +222,8 @@ def homepage():
         f'<a href="{route(slug)}">{icon(key)}<span>{name}</span></a>'
         for slug, key, name in integrations
     )
-    return f"""<section class="hero">
+    return f"""<section class="hero terminal-surface">
+      {terminal_background()}
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <h1>Интеллектуальная <span>автоматизация<br class="desktop-break"> бизнеса</span></h1>
@@ -247,7 +255,8 @@ def homepage():
       </div>
       {case_cards(2, featured=True)}
     </section>
-    <section class="section section-tinted">
+    <section class="section section-tinted terminal-surface">
+      {terminal_background()}
       <div class="wrap">
         <h2>Как проходит внедрение</h2>
         {steps()}
@@ -304,7 +313,9 @@ def cases_page():
 
 def about_page():
     return page_intro("О компании", "ХЭЙВИ выросла из направления автоматизации КАДИС. Внедряем ИИ, опираясь на опыт работы с бухгалтерией, продажами и подбором персонала.") + f"""
-    <section class="section section-tinted"><div class="wrap">
+    <section class="section section-tinted terminal-surface">
+    {terminal_background()}
+    <div class="wrap">
       <h2>Этапы работы</h2>{steps()}
     </div></section>
     {banner()}"""
