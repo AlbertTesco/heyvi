@@ -21,6 +21,38 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+function typeHeroCommand(output) {
+  const duration = Number(getComputedStyle(output).getPropertyValue("--motion-terminal-duration-ms"));
+  if (duration <= 0 || !Number.isFinite(duration)) return;
+
+  const characters = Array.from(output.querySelector(".command-copy").textContent);
+  const typed = document.createElement("span");
+  typed.className = "command-typed";
+  typed.setAttribute("aria-hidden", "true");
+  output.append(typed);
+  output.classList.add("is-typing");
+
+  const start = performance.now();
+  function frame(now) {
+    const count = Math.floor(((now - start) / duration) * characters.length);
+    if (count >= characters.length) {
+      output.classList.remove("is-typing");
+      typed.remove();
+      return;
+    }
+    if (count !== typed.textContent.length) {
+      typed.textContent = characters.slice(0, Math.max(0, count)).join("");
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+const command = document.querySelector(".command-output");
+if (command && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+  typeHeroCommand(command);
+}
+
 function openLinkedScenario() {
   const target = document.getElementById(location.hash.slice(1));
   if (target?.matches("details[data-scenario]")) {
