@@ -219,7 +219,10 @@ def homepage():
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <h1>Интеллектуальная <span>автоматизация<br class="desktop-break"> бизнеса</span></h1>
-          <p>Внедряем ИИ-агентов и связываем их с 1С и CRM.</p>
+          <p class="hero-command">
+            <span class="command-prompt" aria-hidden="true">&gt;</span>
+            <span class="command-output"><span class="command-copy">Внедряем ИИ-агентов и связываем их с 1С и CRM.</span></span>
+          </p>
           {button("Обсудить задачу", "/contact/")}
         </div>
         <div class="hero-art">

@@ -21,11 +21,13 @@
   --color-mark-blue: #2874ef;
   --font-family: 'IBM Plex Sans', system-ui, sans-serif;
   --font-family-brand: Manrope, system-ui, sans-serif;
+  --font-family-terminal: ui-monospace, 'Cascadia Mono', 'DejaVu Sans Mono', monospace;
   --font-width-display: 88%;
   --font-size-caption: 0.8125rem;
   --font-size-small: 0.9375rem;
   --font-size-body: 1rem;
   --font-size-lead: clamp(1.0625rem, 1.36vw, 1.1875rem);
+  --font-size-terminal: clamp(0.9375rem, 1.3vw, 1.0625rem);
   --font-size-card: clamp(1.0625rem, 1.6vw, 1.25rem);
   --font-size-subheading: clamp(1.375rem, 2.4vw, 2rem);
   --font-size-heading: clamp(1.625rem, 3vw, 2.75rem);
@@ -98,9 +100,8 @@
   --border-icon-stroke: 1.7;
   --motion-fast: 160ms;
   --motion-ease: cubic-bezier(.22, .61, .36, 1);
-  --motion-hero-duration: 1200ms;
-  --motion-hero-light-start: 0.35;
   --motion-hero-light-opacity: 0.75;
+  --motion-terminal-duration-ms: 1500;
   --motion-press-scale: 0.96;
   --motion-hover-shift: 0.2rem;
 }
@@ -278,7 +279,18 @@ h3 { font-size: var(--font-size-card); letter-spacing: var(--font-tracking-headi
   overflow-wrap: break-word;
 }
 .hero h1 span { display: block; }
-.hero-copy p { margin-block: var(--space-4) var(--space-6); color: var(--color-text-muted); font-size: var(--font-size-lead); }
+.hero-command {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2);
+  margin-block: var(--space-4) var(--space-6);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-terminal);
+  font-size: var(--font-size-terminal);
+}
+.command-prompt { color: var(--color-accent); }
+.command-output { position: relative; }
+.command-typed { display: none; }
 .hero-art { position: relative; align-self: stretch; min-width: 0; }
 .hero-art img {
   position: absolute;
@@ -461,10 +473,17 @@ h3 { font-size: var(--font-size-card); letter-spacing: var(--font-tracking-headi
   .button:active, .filter-button:active { scale: var(--motion-press-scale); }
   .card-chevron { transition: translate var(--motion-fast) var(--motion-ease); }
   .service-card a:hover .card-chevron { translate: var(--motion-hover-shift) 0; }
-  .hero::before { animation: hero-light-in var(--motion-hero-duration) var(--motion-ease); }
-}
-@keyframes hero-light-in {
-  from { opacity: var(--motion-hero-light-start); }
+  .command-output.is-typing .command-copy { opacity: 0; }
+  .command-typed { display: block; position: absolute; inset: 0; }
+  .command-typed::after {
+    content: "";
+    display: inline-block;
+    width: var(--space-1);
+    height: 0.85em;
+    margin-inline-start: var(--space-1);
+    background: var(--color-accent);
+    vertical-align: -0.08em;
+  }
 }
 
 @media (max-width: 54rem) {
