@@ -21,37 +21,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-const motionControl = document.querySelector(".motion-control");
-if (motionControl) {
-  const hero = motionControl.closest(".hero");
-  const label = motionControl.querySelector("span");
-  const preferenceKey = "heyvi-background-motion";
-  let paused = false;
-
-  try {
-    paused = localStorage.getItem(preferenceKey) === "paused";
-  } catch {
-    // The control still works when browser storage is unavailable.
-  }
-
-  function updateMotion() {
-    hero.dataset.motion = paused ? "paused" : "playing";
-    label.textContent = paused ? "Включить анимацию" : "Пауза анимации";
-  }
-
-  updateMotion();
-  motionControl.hidden = false;
-  motionControl.addEventListener("click", () => {
-    paused = !paused;
-    updateMotion();
-    try {
-      localStorage.setItem(preferenceKey, hero.dataset.motion);
-    } catch {
-      // Keep the choice for this visit.
-    }
-  });
-}
-
 function openLinkedScenario() {
   const target = document.getElementById(location.hash.slice(1));
   if (target?.matches("details[data-scenario]")) {

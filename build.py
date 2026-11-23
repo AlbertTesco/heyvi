@@ -31,8 +31,6 @@ ICONS = {
     "chevron": '<path d="m9 5 7 7-7 7"/>',
     "down": '<path d="m5 9 7 7 7-7"/>',
     "download": '<path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/>',
-    "pause": '<path d="M9 5v14m6-14v14"/>',
-    "play": '<path d="m8 5 12 7-12 7Z"/>',
 }
 
 CATEGORIES = (("all", "Все услуги"), ("agents", "ИИ-агенты"), ("systems", "1С и CRM"), ("digital", "Сайты и маркетинг"))
@@ -218,7 +216,6 @@ def homepage():
         for slug, key, name in integrations
     )
     return f"""<section class="hero">
-      <div class="hero-ambient" id="hero-ambient" aria-hidden="true"></div>
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <h1>Интеллектуальная <span>автоматизация<br class="desktop-break"> бизнеса</span></h1>
@@ -227,10 +224,6 @@ def homepage():
         </div>
         <div class="hero-art">
           <img src="/assets/hero-orbit.webp" width="1152" height="1152" alt="" fetchpriority="high">
-          <button class="motion-control" type="button" aria-controls="hero-ambient" hidden>
-            {icon("pause", "icon motion-pause")}{icon("play", "icon motion-play")}
-            <span>Пауза анимации</span>
-          </button>
         </div>
       </div>
     </section>
