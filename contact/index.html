@@ -9,8 +9,8 @@
 <title>Обсудить задачу — ХЭЙВИ</title>
 <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/ibm-plex-sans-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=d5963c9a3f8f">
-<script src="../assets/site.js?v=d2464ba4ec3f" defer></script>
+<link rel="stylesheet" href="../assets/site.css?v=720212071064">
+<script src="../assets/site.js?v=8248a5547e2f" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
@@ -26,17 +26,19 @@
 </header>
 <main id="main" tabindex="-1">
 <section class="page-intro terminal-surface">
-      <div class="terminal-background" aria-hidden="true">
-        <div class="terminal-trace"><span>&gt;_</span><span class="terminal-rows"></span></div>
-      </div>
       <div class="wrap">
         <nav class="breadcrumbs" aria-label="Путь к странице"><a href="../">Главная</a><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span aria-current="page">Обсудить задачу</span></nav>
         <div class="intro-grid">
-          <h1>Обсудить задачу</h1><p class="lead">Опишите процесс и скачайте бриф.</p>
+          <div class="intro-copy"><h1>Обсудить задачу</h1><p class="lead">Опишите процесс и скачайте бриф.</p></div>
+          <div class="terminal-trace" data-terminal-run aria-hidden="true">
+      <div class="terminal-entry"><span>&gt;</span> heyvi demo brief</div>
+      <div class="terminal-progress"><span>·</span> Готовлю поля</div>
+      <div class="terminal-result"><span>✓</span> Бриф открыт</div>
+    </div>
         </div>
       </div>
     </section>
-    <section class="wrap section catalog">
+    <section class="wrap section catalog contact-layout">
       <div class="brief-panel">
         <form id="brief-form" hidden>
           <div class="field"><label for="service">Направление</label>
@@ -55,6 +57,11 @@
         </form>
         <noscript><p>Включите JavaScript, чтобы заполнить бриф на сайте, или скачайте шаблон.</p><a class="text-link" href="../assets/brief-template.txt" download>Скачать шаблон брифа</a></noscript>
       </div>
+      <div class="terminal-trace" data-terminal-run aria-hidden="true">
+      <div class="terminal-entry"><span>&gt;</span> heyvi demo template</div>
+      <div class="terminal-progress"><span>·</span> Загружаю шаблон</div>
+      <div class="terminal-result"><span>✓</span> Можно заполнить</div>
+    </div>
     </section>
 </main>
 <footer class="site-footer">
